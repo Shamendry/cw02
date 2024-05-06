@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
 import numpy as np
+import openpyxl
 
 #Loading the dataset
 df = pd.read_excel('MingerCleaned_data.xlsx')
