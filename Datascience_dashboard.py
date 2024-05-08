@@ -11,6 +11,37 @@ df = pd.read_excel('MingerCleaned_data.xlsx')
 #Streamlit app title
 st.title(" :chart_with_upwards_trend: Minger Analysis Dashboard")
 
+# Adding dashboard filter
+st.sidebar.title("Dashboard Filters")
+
+# Making tabs
+order_details, association_rules_tab = st.sidebar.columns(2)
+
+with order_details:
+    st.header("Order Details")
+    
+    # Date picker
+    start_date = pd.to_datetime(df['Order Date']).min()
+    end_date = pd.to_datetime(df['Order Date']).max()
+    start = pd.to_datetime(st.sidebar.date_input('Pick start date', start_date))
+    end = pd.to_datetime(st.sidebar.date_input('Pick end date', end_date))
+    filtered_df = df[(df['Order Date'] >= start) & (df['Order Date'] <= end)].copy()
+
+    # Market and category selection
+    market = st.sidebar.selectbox('Pick your Market', filtered_df['Market'].unique())
+    category = st.sidebar.multiselect('Pick your category', filtered_df['Category'].unique())
+
+    # Filtering the dashboard using the Market and product category
+    if market and category:  # Both market and category are selected
+        filtered_df = filtered_df[(filtered_df["Market"] == market) & (filtered_df["Category"].isin(category))]
+    elif market:  # Only market is selected
+        filtered_df = filtered_df[filtered_df["Market"] == market]
+    elif category:  # Only category is selected
+        filtered_df = filtered_df[filtered_df["Category"].isin(category)]
+    else:
+        pass  # Show all data if no selections are made
+
+
 # Creating two columns layout
 col1, col2 = st.columns(2)
 
