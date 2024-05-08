@@ -45,6 +45,14 @@ with order_details:
 # Creating two columns layout
 col1, col2 = st.columns(2)
 
+# Summary Card for Total Profit
+total_profit = df['Profit'].sum()
+col1.metric("Total Profit", f"${total_profit:,.2f}")
+
+# Summary Card for Total Profit
+total_sales = df['Sales'].sum()
+col2.metric("Total Sales", f"${total_sales:,.2f}")
+
 # Pie chart showing sum of sales by category
 pie_chart_data = df['Category'].value_counts().reset_index()
 pie_chart_data.columns = ['Category', 'Sales']
@@ -107,13 +115,9 @@ fig12 = go.Figure(data=[
 fig12.update_layout(title='Ribbon Chart of Sales and Profit', xaxis_title='Date', yaxis_title='Value')
 col1.plotly_chart(fig12, use_container_width=True)
 
-# Summary Card for Total Profit
-total_profit = df['Profit'].sum()
-col2.metric("Total Profit", f"${total_profit:,.2f}")
-
 # Area Chart of Sales Over Region
 cumulative_sales = df.groupby('Region')['Sales'].sum().cumsum().reset_index()
-fig6 = px.area(cumulative_sales, x='Region', y='Sales', title='Cumulative Sales Over Time')
+fig6 = px.area(cumulative_sales, x='Region', y='Sales', title='Cumulative Sales Over Region')
 col2.plotly_chart(fig6, use_container_width=True)
 
 
